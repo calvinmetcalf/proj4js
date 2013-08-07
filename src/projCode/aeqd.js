@@ -1,7 +1,6 @@
-define(function(require, exports, module) {
-  var common = require('../common');
+define(['../common'],function(common) {
 
-  module.exports = {
+  return {
 
     init: function() {
       this.sin_p12 = Math.sin(this.lat0);

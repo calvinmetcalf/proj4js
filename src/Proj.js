@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define(['./extend','./common','./defs','./constants','./datum','./projections','./wkt'],function(extend,common,defs,constants,datum,projections,wkt) {
   /**
    * Class: proj
    *
@@ -14,27 +14,19 @@ define(function(require, exports, module) {
    *
    * A projection object has properties for units and title strings.
    */
-  var extend = require('./extend');
-  var common = require('./common');
-  var defs = require('./defs');
-  var constants = require('./constants');
-  var datum = require('./datum');
-  var projections = require('./projections');
-  var wkt = require('./wkt');
   
   var proj = function proj(srsCode) {
     if (!(this instanceof proj)) {
       return new proj(srsCode);
     }
     this.srsCodeInput = srsCode;
-    var obj;
     //check to see if this is a WKT string
-    if ((srsCode.indexOf('GEOGCS') >= 0) || (srsCode.indexOf('GEOCCS') >= 0) || (srsCode.indexOf('PROJCS') >= 0) || (srsCode.indexOf('LOCAL_CS') >= 0)) {
-      obj = wkt(srsCode);
-      this.deriveConstants(obj);
-      extend(this,obj);
-      //this.loadProjCode(this.projName);
-  
+    if(srsCode && typeof srsCode === 'object'){
+      extend(this,this.deriveConstants(srsCode));
+    }else if (['GEOGCS','GEOCCS','PROJCS','LOCAL_CS'].some(function(term){
+      return srsCode.indexOf(term) > -1;
+    })) {
+      extend(this,this.deriveConstants(wkt(srsCode)));
     }
     else {
       if (srsCode.indexOf(":") > -1) {
@@ -49,7 +41,7 @@ define(function(require, exports, module) {
       this.parseDefs(srsCode);
 
     }
-    this.initTransforms(this.projName);
+    this.initTransforms();
   };
   proj.prototype = {
   
@@ -106,11 +98,11 @@ define(function(require, exports, module) {
      *    Finalize the initialization of the Proj object
      *
      */
-    initTransforms: function(projName) {
-      if (!(projName in proj.projections)) {
-        throw ("unknown projection " + projName);
+    initTransforms: function() {
+      if (!(this.projName in proj.projections)) {
+        throw ("unknown projection " + this.projName);
       }
-      extend(this, proj.projections[projName]);
+      extend(this, proj.projections[this.projName]);
       this.init();
     },
   
@@ -214,9 +206,10 @@ define(function(require, exports, module) {
       }
   
       self.datum = datum(self);
+      return self;
     }
   };
   proj.projections = projections;
-  module.exports = proj;
+  return proj;
 
 });

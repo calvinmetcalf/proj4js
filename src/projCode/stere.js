@@ -1,8 +1,6 @@
-define(function(require, exports, module) { // Initialize the Stereographic projection
+define(['../common'],function(common) {
 
-  var common = require('../common');
-
-  module.exports = {
+  return {
     ssfn_: function(phit, sinphi, eccen) {
       sinphi *= eccen;
       return (Math.tan(0.5 * (common.HALF_PI + phit)) * Math.pow((1 - sinphi) / (1 + sinphi), 0.5 * eccen));

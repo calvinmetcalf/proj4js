@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define(['../common'],function(common) {
   /*******************************************************************************
 NAME                     ALBERS CONICAL EQUAL AREA 
 
@@ -21,9 +21,9 @@ ALGORITHM REFERENCES
     U.S. Geological Survey Professional Paper 1453 , United State Government
     Printing Office, Washington D.C., 1989.
 *******************************************************************************/
-  var common = require('../common');
 
-  module.exports = {
+
+  return {
     init: function() {
 
       if (Math.abs(this.lat1 + this.lat2) < common.EPSLN) {

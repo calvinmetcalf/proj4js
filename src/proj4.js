@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define(['./core','./Proj','./Point','./defs','./transform','./mgrs'],function(proj4,proj,point,defs,transform,mgrs) {
   /*
 Author:       Mike Adair madairATdmsolutions.ca
               Richard Greenwood rich@greenwoodmap.com
@@ -45,14 +45,13 @@ $Id: Proj.js 2956 2007-07-09 12:17:52Z steven $
    * Property: defaultDatum
    * The datum to use when no others a specified
    */
-  var proj4 = require('./core');
   proj4.defaultDatum = 'WGS84'; //default datum
-  proj4.Proj = require('./Proj');
+  proj4.Proj = proj;
   proj4.WGS84 = new proj4.Proj('WGS84');
-  proj4.Point = require('./Point');
-  proj4.defs = require('./defs');
-  proj4.transform = require('./transform');
-  proj4.mgrs = require('./mgrs');
-  module.exports = proj4;
+  proj4.Point =point;
+  proj4.defs = defs;
+  proj4.transform = transform;
+  proj4.mgrs = mgrs;
+  return proj4;
 
 });

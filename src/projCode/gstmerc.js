@@ -1,7 +1,6 @@
-define(function(require, exports, module) {
-  var common = require('../common');
+define(['../common'],function(common) {
 
-  module.exports = {
+  return {
     init: function() {
 
       // array of:  a, b, lon0, lat0, k0, x0, y0
